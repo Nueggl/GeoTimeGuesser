@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "year": 1000,
+    "target_year": 1000,
+    "target_date": "1000-07-01",
+    "file": "world_1000.topojson",
+    "path": "public/data/world_1000.topojson",
+    "source": "GitHub",
+    "feature_count": 264
+  },
+  {
+    "id": 2,
+    "year": 1492,
+    "target_year": 1492,
+    "target_date": "1492-07-01",
+    "file": "world_1492.topojson",
+    "path": "public/data/world_1492.topojson",
+    "source": "GitHub",
+    "feature_count": 1946
+  },
+  {
+    "id": 3,
+    "year": 1783,
+    "target_year": 1783,
+    "target_date": "1783-07-01",
+    "file": "world_1783.topojson",
+    "path": "public/data/world_1783.topojson",
+    "source": "GitHub",
+    "feature_count": 641
+  },
+  {
+    "id": 4,
+    "year": 1815,
+    "target_year": 1815,
+    "target_date": "1815-07-01",
+    "file": "world_1815.topojson",
+    "path": "public/data/world_1815.topojson",
+    "source": "GitHub",
+    "feature_count": 436
+  },
+  {
+    "id": 5,
+    "year": 1880,
+    "target_year": 1880,
+    "target_date": "1880-07-01",
+    "file": "world_1880.topojson",
+    "path": "public/data/world_1880.topojson",
+    "source": "GitHub",
+    "feature_count": 236
+  },
+  {
+    "id": 6,
+    "year": 1914,
+    "target_year": 1914,
+    "target_date": "1914-07-01",
+    "file": "world_1914.topojson",
+    "path": "public/data/world_1914.topojson",
+    "source": "CShapes",
+    "feature_count": 150
+  },
+  {
+    "id": 7,
+    "year": 1938,
+    "target_year": 1938,
+    "target_date": "1938-07-01",
+    "file": "world_1938.topojson",
+    "path": "public/data/world_1938.topojson",
+    "source": "CShapes",
+    "feature_count": 173
+  },
+  {
+    "id": 8,
+    "year": 1945,
+    "target_year": 1945,
+    "target_date": "1945-07-01",
+    "file": "world_1945.topojson",
+    "path": "public/data/world_1945.topojson",
+    "source": "CShapes",
+    "feature_count": 170
+  },
+  {
+    "id": 9,
+    "year": 1960,
+    "target_year": 1960,
+    "target_date": "1960-07-01",
+    "file": "world_1960.topojson",
+    "path": "public/data/world_1960.topojson",
+    "source": "CShapes",
+    "feature_count": 164
+  },
+  {
+    "id": 10,
+    "year": 1991,
+    "target_year": 1991,
+    "target_date": "1991-07-01",
+    "file": "world_1991.topojson",
+    "path": "public/data/world_1991.topojson",
+    "source": "CShapes",
+    "feature_count": 157
+  }
+]

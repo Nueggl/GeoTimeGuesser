@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoTimeGuesser – Historisches Karten-Ratespiel</title>
+  <link rel="stylesheet" href="./css/styles.css" />
+  <!-- TopoJSON Client for parsing compact TopoJSON files into GeoJSON polygons -->
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+  <!-- Globe.gl for interactive 3D WebGL vector polygon globe rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/globe.gl@2.35.1/dist/globe.gl.min.js"></script>
+</head>
+<body>
+  <!-- Interactive 3D Globe / Vector Map Viewport -->
+  <div id="map-viewport" aria-label="Interaktive Historische Weltkarte"></div>
+
+  <!-- Floating Territory Hover Tooltip -->
+  <div id="polygon-hover-badge" class="polygon-badge hidden"></div>
+
+  <!-- ====================================================================
+       1. DASHBOARD (Startbildschirm)
+       ==================================================================== -->
+  <section id="screen-dashboard" class="screen active" aria-labelledby="dashboard-heading">
+    <div class="dashboard-spacer"></div>
+
+    <div class="dashboard-hero-card">
+      <span class="dashboard-eyebrow">3D Historischer Atlas</span>
+      <h1 id="dashboard-heading" class="dashboard-title">GeoTimeGuesser</h1>
+      <p class="dashboard-subtitle">
+        Erkunde historische Staatsgrenzen, Imperien und Kulturräume auf dem interaktiven
+        3D-Globus und bestimme das exakte Jahr der Weltkarte.
+      </p>
+      <button id="btn-start-round" type="button" class="btn btn-primary btn-lg">
+        Runde starten
+      </button>
+      <div id="manifest-status-badge" class="manifest-badge">
+        Lade Karten-Manifest...
+      </div>
+    </div>
+
+    <div class="dashboard-spacer"></div>
+
+    <footer class="dashboard-footer">
+      <div id="citation-summary" class="footer-summary">
+        Maps by: CShapes 2.0 &amp; historical-basemaps
+      </div>
+      <div id="citation-details" class="footer-citations"></div>
+    </footer>
+  </section>
+
+  <!-- ====================================================================
+       2. SPIEL-SCREEN (Runde)
+       ==================================================================== -->
+  <section id="screen-game" class="screen" aria-label="Spiel-Screen">
+    <!-- Top Navigation & Map Controls -->
+    <header class="game-top-bar">
+      <div class="game-top-left">
+        <button id="btn-game-home" type="button" class="btn btn-secondary">
+          Home
+        </button>
+        <div id="map-loading-indicator" class="map-Status-pill hidden">
+          Historische Karte wird geladen...
+        </div>
+      </div>
+
+      <div class="game-top-right">
+        <button id="btn-zoom-in" type="button" class="btn btn-icon" title="Hineinzoomen (+)">
+          + Zoom
+        </button>
+        <button id="btn-zoom-out" type="button" class="btn btn-icon" title="Herauszoomen (-)">
+          &minus; Zoom
+        </button>
+        <button id="btn-reset-view" type="button" class="btn btn-icon" title="Kamera zurücksetzen">
+          Ansicht zentrieren
+        </button>
+        <button id="btn-toggle-mode" type="button" class="btn btn-icon" title="Zwischen 3D-Globus und 2D-Vektorkarte wechseln">
+          Ansicht: 3D-Globus
+        </button>
+      </div>
+    </header>
+
+    <!-- Bottom Control Dock: Slider + Left/Right Synchronized Inputs + Actions -->
+    <div class="game-bottom-dock">
+      <div class="dock-header-row">
+        <div class="selected-year-banner">
+          <span class="selected-year-label">Geschätztes Jahr:</span>
+          <span id="current-year-readout" class="selected-year-value">1900</span>
+        </div>
+
+        <!-- Visual Feedback ("Falsch") -->
+        <div id="guess-feedback" class="guess-feedback hidden" role="alert" aria-live="polite"></div>
+      </div>
+
+      <!-- Synchronized Left Input | Horizontal Slider | Right Input -->
+      <div class="year-control-row">
+        <div class="year-input-wrapper">
+          <label for="year-input-left" class="year-input-caption">Jahr (Eingabe)</label>
+          <input
+            id="year-input-left"
+            type="number"
+            class="year-number-input"
+            min="-2000"
+            max="2024"
+            step="1"
+            value="1900"
+            aria-label="Geschätztes Jahr Eingabefeld links"
+          />
+        </div>
+
+        <div class="slider-container">
+          <input
+            id="year-slider"
+            type="range"
+            class="year-range-slider"
+            min="-2000"
+            max="2024"
+            step="1"
+            value="1900"
+            aria-label="Jahres-Slider"
+          />
+          <div class="slider-ticks">
+            <span>-2000</span>
+            <span>-1000</span>
+            <span>0</span>
+            <span>1000</span>
+            <span>1500</span>
+            <span>2024</span>
+          </div>
+        </div>
+
+        <div class="year-input-wrapper">
+          <label for="year-input-right" class="year-input-caption">Jahr (Eingabe)</label>
+          <input
+            id="year-input-right"
+            type="number"
+            class="year-number-input"
+            min="-2000"
+            max="2024"
+            step="1"
+            value="1900"
+            aria-label="Geschätztes Jahr Eingabefeld rechts"
+          />
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="game-actions-row">
+        <button id="btn-reveal" type="button" class="btn btn-warning">
+          Auflösen
+        </button>
+        <button id="btn-guess" type="button" class="btn btn-primary">
+          Raten
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       3. LÖSUNGS-SCREEN
+       ==================================================================== -->
+  <section id="screen-solution" class="screen" aria-label="Lösungs-Screen">
+    <div class="solution-card">
+      <span id="solution-status-badge" class="solution-badge badge-success">
+        Lösung
+      </span>
+      <div class="solution-heading-label">Gesuchtes Kartenjahr</div>
+      <div id="solution-correct-year" class="solution-year-display">1914</div>
+      <div id="solution-era-label" class="solution-era-sub">Jahr 1914 n. Chr.</div>
+
+      <div class="solution-meta-grid">
+        <div class="meta-box">
+          <span class="meta-box-label">Datensatz</span>
+          <span id="solution-meta-source" class="meta-box-value">CShapes 2.0</span>
+        </div>
+        <div class="meta-box">
+          <span class="meta-box-label">Territorien</span>
+          <span id="solution-meta-features" class="meta-box-value">150 Polygone</span>
+        </div>
+        <div class="meta-box">
+          <span class="meta-box-label">Ergebnis</span>
+          <span id="solution-meta-guess-info" class="meta-box-value">–</span>
+        </div>
+      </div>
+
+      <div class="solution-actions">
+        <button id="btn-solution-home" type="button" class="btn btn-secondary">
+          Home
+        </button>
+        <button id="btn-next-round" type="button" class="btn btn-primary">
+          Nächste Runde
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main ES Module Entrypoint -->
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

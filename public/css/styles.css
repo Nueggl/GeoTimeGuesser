@@ -1,0 +1,685 @@
+/* ==========================================================================
+   GeoTimeGuesser - Stylesheet
+   Modern Cartographic Dark UI with Interactive 3D Globe HUD Overlays
+   ========================================================================== */
+
+:root {
+  --bg-deep: #050b14;
+  --bg-panel: rgba(15, 23, 42, 0.84);
+  --bg-panel-strong: rgba(15, 23, 42, 0.94);
+  --border-subtle: rgba(148, 163, 184, 0.22);
+  --border-highlight: rgba(56, 189, 248, 0.45);
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --accent-primary: #38bdf8;
+  --accent-primary-hover: #0ea5e9;
+  --accent-amber: #f59e0b;
+  --danger-red: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.16);
+  --success-green: #10b981;
+  --success-bg: rgba(16, 185, 129, 0.18);
+  --shadow-lg: 0 20px 45px -15px rgba(0, 0, 0, 0.7);
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 35%, #0c192c 0%, var(--bg-deep) 75%);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ==========================================================================
+   Interactive Map / 3D Globe Viewport (Full-Screen Background Layer)
+   ========================================================================== */
+
+#map-viewport {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.globe-mount {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+.globe-mount:active {
+  cursor: grabbing;
+}
+
+.vector-canvas-2d {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  display: block;
+}
+
+/* ==========================================================================
+   Screen Layering
+   ========================================================================== */
+
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: none;
+  pointer-events: none;
+}
+
+.screen.active {
+  display: flex;
+}
+
+/* ==========================================================================
+   1. Dashboard Screen (Startbildschirm)
+   ========================================================================== */
+
+#screen-dashboard {
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2.5rem 1.5rem 1.5rem;
+  background: radial-gradient(
+    circle at center,
+    rgba(5, 11, 20, 0.45) 0%,
+    rgba(5, 11, 20, 0.82) 100%
+  );
+  backdrop-filter: blur(4px);
+  pointer-events: auto;
+}
+
+.dashboard-spacer {
+  flex: 1;
+}
+
+.dashboard-hero-card {
+  width: 100%;
+  max-width: 580px;
+  background: var(--bg-panel-strong);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 2.75rem 2.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(16px);
+  animation: fadeInUp 0.35s ease-out;
+}
+
+.dashboard-eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  margin-bottom: 1.1rem;
+}
+
+.dashboard-title {
+  font-size: clamp(2.2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.dashboard-subtitle {
+  font-size: 1.02rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin-bottom: 1.75rem;
+}
+
+.manifest-badge {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 1.1rem;
+}
+
+/* Dashboard Footer & Citations */
+.dashboard-footer {
+  width: 100%;
+  max-width: 900px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.4rem;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  margin-top: 2rem;
+}
+
+.footer-summary {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.footer-citations {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+  text-align: left;
+}
+
+.citation-item strong {
+  color: var(--text-secondary);
+}
+
+.citation-item a {
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+.citation-item a:hover {
+  text-decoration: underline;
+}
+
+.citation-muted {
+  opacity: 0.75;
+}
+
+/* ==========================================================================
+   2. Game Screen (Spiel-Screen / Runde)
+   ========================================================================== */
+
+#screen-game {
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.1rem 1.4rem 1.4rem;
+}
+
+/* Top Bar: Home Button & Map Controls */
+.game-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  width: 100%;
+  pointer-events: none;
+}
+
+.game-top-left,
+.game-top-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  pointer-events: auto;
+}
+
+.map-Status-pill {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--accent-primary);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-lg);
+}
+
+.polygon-badge {
+  position: fixed;
+  top: 4.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  background: var(--bg-panel-strong);
+  border: 1px solid var(--border-highlight);
+  border-radius: 999px;
+  padding: 0.45rem 1.15rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  pointer-events: none;
+  box-shadow: var(--shadow-lg);
+  white-space: nowrap;
+}
+
+/* Bottom Control Dock: Slider, Synchronized Left/Right Inputs, Actions */
+.game-bottom-dock {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  background: var(--bg-panel-strong);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem 1.5rem 1.25rem;
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(16px);
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.dock-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.selected-year-banner {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.selected-year-label {
+  font-size: 0.84rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.selected-year-value {
+  font-family: var(--font-mono);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+}
+
+/* Visual Feedback for Wrong Guess ("Falsch") */
+.guess-feedback {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-red);
+  color: #fca5a5;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.92rem;
+}
+
+.feedback-wrong-title {
+  color: var(--danger-red);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.feedback-wrong-detail {
+  color: #fecaca;
+  font-size: 0.85rem;
+}
+
+/* Synchronized Input Row: [Input Left] --- [Big Horizontal Slider] --- [Input Right] */
+.year-control-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 120px;
+  align-items: center;
+  gap: 1rem;
+}
+
+.year-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.year-input-caption {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.year-number-input {
+  width: 100%;
+  background: rgba(2, 6, 23, 0.75);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 0.6rem 0.65rem;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.year-number-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.22);
+}
+
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: 100%;
+}
+
+.year-range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  background: linear-gradient(90deg, #1e293b 0%, #334155 50%, #0284c7 100%);
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+}
+
+.year-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+  cursor: grab;
+  transition: transform 0.12s ease, background-color 0.12s ease;
+}
+
+.year-range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.12);
+  background: var(--accent-primary-hover);
+}
+
+.year-range-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+  cursor: grab;
+  transition: transform 0.12s ease;
+}
+
+.slider-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.73rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  padding: 0 2px;
+}
+
+/* Action Buttons Row ("Raten", "Auflösen") */
+.game-actions-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.85rem;
+  padding-top: 0.2rem;
+}
+
+/* ==========================================================================
+   3. Solution Screen (Lösungs-Screen)
+   ========================================================================== */
+
+#screen-solution {
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 1.5rem;
+}
+
+.solution-card {
+  width: 100%;
+  max-width: 560px;
+  background: var(--bg-panel-strong);
+  border: 1px solid var(--border-highlight);
+  border-radius: var(--radius-lg);
+  padding: 2rem 2.2rem;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(18px);
+  pointer-events: auto;
+  animation: fadeInUp 0.28s ease-out;
+  margin-bottom: 0.5rem;
+}
+
+.solution-badge {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  margin-bottom: 0.75rem;
+}
+
+.badge-success {
+  background: var(--success-bg);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.45);
+}
+
+.badge-neutral {
+  background: rgba(245, 158, 11, 0.16);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.solution-heading-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.solution-year-display {
+  font-family: var(--font-mono);
+  font-size: clamp(2.8rem, 6vw, 4rem);
+  font-weight: 800;
+  color: var(--accent-primary);
+  line-height: 1.05;
+  margin-bottom: 0.25rem;
+}
+
+.solution-era-sub {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.solution-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+  background: rgba(2, 6, 23, 0.55);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.8rem;
+}
+
+.meta-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.meta-box-label {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.meta-box-value {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.solution-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.7rem 1.35rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+  color: #04101f;
+  font-weight: 700;
+  box-shadow: 0 6px 20px -4px rgba(56, 189, 248, 0.5);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #7dd3fc 0%, #0ea5e9 100%);
+}
+
+.btn-lg {
+  font-size: 1.08rem;
+  padding: 0.9rem 2rem;
+  border-radius: 12px;
+}
+
+.btn-secondary {
+  background: rgba(30, 41, 59, 0.85);
+  color: var(--text-primary);
+  border-color: var(--border-subtle);
+}
+
+.btn-secondary:hover {
+  background: rgba(51, 65, 85, 0.95);
+  border-color: rgba(148, 163, 184, 0.45);
+}
+
+.btn-warning {
+  background: rgba(245, 158, 11, 0.16);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.btn-warning:hover {
+  background: rgba(245, 158, 11, 0.28);
+}
+
+.btn-icon {
+  padding: 0.55rem 0.85rem;
+  font-size: 0.88rem;
+  background: var(--bg-panel);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  backdrop-filter: blur(10px);
+}
+
+.btn-icon:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+/* ==========================================================================
+   Animations & Responsive Breakpoints
+   ========================================================================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shakeX {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
+}
+
+.feedback-shake {
+  animation: shakeX 0.35s ease-in-out;
+}
+
+@media (max-width: 720px) {
+  .year-control-row {
+    grid-template-columns: 90px 1fr 90px;
+    gap: 0.65rem;
+  }
+
+  .solution-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .game-actions-row {
+    justify-content: stretch;
+  }
+
+  .game-actions-row .btn {
+    flex: 1;
+  }
+}
