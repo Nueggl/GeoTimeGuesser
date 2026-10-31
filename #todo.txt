@@ -9,3 +9,6 @@ Noch nicht benutzt:
 
     Cederman, Lars-Erik, Luc Girardin, Carl Müller-Crepon, and Yannick Pengl. 2025. Nationalism and the Transformation of the State: Border Change and Political Violence in the Modern World. Cambridge University Press.)
 
+Zitation ältere Karten:
+    https://github.com/aourednik/historical-basemaps
+
